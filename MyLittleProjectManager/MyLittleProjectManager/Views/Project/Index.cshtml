@@ -8,6 +8,7 @@
         background-color: dimgrey;
         padding-bottom: 10px;
         border-radius: 3px 3px;
+        min-height:100px;
     }
 
     .MLPMCard {
@@ -32,7 +33,7 @@
     }
 </style>
 <script type="text/javascript">
-   
+
     $(document).ready(function () {
 
         loadProducts();
@@ -61,6 +62,7 @@
             var lstCards = $('li');
             //Set Drag on Each 'li' in the list
             $.each(lstCards, function (idx, val) {
+                $('li').off('dragstart');
                 $('li').on('dragstart', function (evt) {
                     evt.originalEvent.dataTransfer.setData("Text", evt.target.outerHTML);
                     evt.originalEvent.dataTransfer.setData("Id", evt.target.getAttribute("customId"));
@@ -71,6 +73,7 @@
                     {
                      <text>
             //Set the Drop on the <div>
+            $("#" + "@column.Name.Replace(" ","")").off('drop');
             $("#" + "@column.Name.Replace(" ","")").on('drop', function (evt) {
                 evt.preventDefault();
                 var data = evt.originalEvent.dataTransfer.getData("Text");
@@ -81,6 +84,7 @@
                 //var li = "<li class=\"MLPMCard\" draggable=\"true\"><div class=\"MLPMCardTitle\">" + data.name + "</div><div class=\"MLPMCardDesc\">" + data.description + "</div></li>";
                 //li.textContent = foreach;
                 lst.append(data);
+                setEvents();
             });
             //The dragover
             $("#" + "@column.Name.Replace(" ", "")").on('dragover', function (evt) {
@@ -89,7 +93,7 @@
 
                 </text>
                     }
-            
+
         }
     });
 </script>
@@ -106,7 +110,7 @@
             <div class="col-md-4">
                 <div class="MLPMColumn">
                     <h3 class="MLPMColumnName">@column.Name</h3>
-                    <ol id="@column.Name.Replace(" ","")">
+                    <ol id="@column.Name.Replace(" ","")" style="min-height:100px">
                         @*@foreach (var card in column.Cards.OrderBy(c => c.Order))
                                 {
                                                 <li class="MLPMCard" draggable="true">
