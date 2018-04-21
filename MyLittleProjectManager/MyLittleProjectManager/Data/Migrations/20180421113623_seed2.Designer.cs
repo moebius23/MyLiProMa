@@ -12,9 +12,10 @@ using System;
 namespace MyLittleProjectManager.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180421113623_seed2")]
+    partial class seed2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,7 +190,7 @@ namespace MyLittleProjectManager.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ColumnId");
+                    b.Property<int>("ColumnId");
 
                     b.Property<string>("Description");
 
@@ -213,7 +214,7 @@ namespace MyLittleProjectManager.Data.Migrations
 
                     b.Property<int>("Order");
 
-                    b.Property<int?>("ProjectId");
+                    b.Property<int>("ProjectId");
 
                     b.HasKey("Id");
 
@@ -350,16 +351,18 @@ namespace MyLittleProjectManager.Data.Migrations
 
             modelBuilder.Entity("MyLittleProjectManager.Models.Card", b =>
                 {
-                    b.HasOne("MyLittleProjectManager.Models.Column")
+                    b.HasOne("MyLittleProjectManager.Models.Column", "Column")
                         .WithMany("Cards")
-                        .HasForeignKey("ColumnId");
+                        .HasForeignKey("ColumnId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.Column", b =>
                 {
-                    b.HasOne("MyLittleProjectManager.Models.Project")
+                    b.HasOne("MyLittleProjectManager.Models.Project", "Project")
                         .WithMany("Columns")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.Item", b =>

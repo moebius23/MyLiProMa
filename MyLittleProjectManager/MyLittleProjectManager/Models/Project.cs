@@ -10,7 +10,8 @@ namespace MyLittleProjectManager.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ObservableCollection<Column> Columns { get; set; }
+		public string Description { get; set; }
+		public ObservableCollection<Column> Columns { get; set; }
 
         public Project()
         {
