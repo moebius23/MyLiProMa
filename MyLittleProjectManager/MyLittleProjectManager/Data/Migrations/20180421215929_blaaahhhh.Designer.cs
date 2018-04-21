@@ -12,9 +12,10 @@ using System;
 namespace MyLittleProjectManager.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180421215929_blaaahhhh")]
+    partial class blaaahhhh
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,8 +288,6 @@ namespace MyLittleProjectManager.Data.Migrations
                     b.Property<int>("TitleId");
 
                     b.Property<int>("PlayerId");
-
-                    b.Property<bool>("IsSelected");
 
                     b.HasKey("TitleId", "PlayerId");
 

@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyLittleProjectManager.Models
 {
-    public class PlayerProfile
+	public class PlayerProfile
     {
         public int Id { get; set; }
 		public string Pseudo { get; set; }
@@ -21,8 +18,7 @@ namespace MyLittleProjectManager.Models
 			set { SelectedItems = JsonConvert.DeserializeObject<Dictionary<EItemType, PlayerItem>>(value); }
 		}
 		public List<PlayerItem> AvailableItems { get; set; }
-
-        public PlayerTitle SelectedTitle { get; set; }
+														
         public List<PlayerTitle> AvailableTitles { get; set; }
 
         public PlayerProfile()

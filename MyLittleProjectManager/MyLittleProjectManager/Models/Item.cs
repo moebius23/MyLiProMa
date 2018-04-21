@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MyLittleProjectManager.Models
 {
 	public enum EItemType
 	{
 		Avatar,
-		Hat
+		Hat,
+		Glasses,
+		Tie,
+		Shoes,
+		Accessory
 	}
 
     public class Item
