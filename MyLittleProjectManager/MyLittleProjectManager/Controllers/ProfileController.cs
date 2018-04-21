@@ -24,11 +24,16 @@ namespace MyLittleProjectManager.Controllers
         public IActionResult Index()
         {
 			var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
-			PlayerProfile pp = _context.PlayerProfiles.Where(p => p == user.PlayerProfile)
-				.Include(p => p.AvailableItems)
-				.Include(p => p.SelectedItems)
-				.Include(p => p.AvailableTitles)
-				.SingleOrDefault();
+
+			PlayerProfile pp;
+			if (user.PlayerProfile != null)
+			{
+				pp = _context.PlayerProfiles.Where(p => p == user.PlayerProfile)
+					.Include(p => p.AvailableItems)
+					.Include(p => p.AvailableTitles)
+					.SingleOrDefault();
+			}
+			else pp = new PlayerProfile();
             return View(pp);
         }
     }
