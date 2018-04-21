@@ -18,7 +18,13 @@ namespace MyLittleProjectManager.Models
 		public Dictionary<EItemType, PlayerItem> SelectedItems { get; set; }
 		public string SelectedItemsJson {
 			get { return JsonConvert.SerializeObject(SelectedItems); }
-			set { SelectedItems = JsonConvert.DeserializeObject<Dictionary<EItemType, PlayerItem>>(value); }
+			set
+            {
+                if(value != null)
+                {
+                    SelectedItems = JsonConvert.DeserializeObject<Dictionary<EItemType, PlayerItem>>(value);
+                }
+            }
 		}
 		public List<PlayerItem> AvailableItems { get; set; }
 
@@ -30,6 +36,7 @@ namespace MyLittleProjectManager.Models
             AvailableItems = new List<PlayerItem>();
             AvailableTitles = new List<PlayerTitle>();
 			PlayerProjects = new List<PlayerProject>();
+            SelectedItems = new Dictionary<EItemType, PlayerItem>();
         }
 
 		public override bool Equals(object obj)

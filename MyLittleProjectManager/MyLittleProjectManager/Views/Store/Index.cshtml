@@ -11,17 +11,47 @@
     <div class="row">
         <div class="col-md-6">
             <h3>Titles</h3>
-            @foreach(var title in Model.StoreTitle)
-            {
-                @Html.CheckBox(expression:string.Format("{0} : {1} MICoins",title.Text,title.Price),isChecked:false,htmlAttributes:new {id="title"+title.Id })
-            }
+            
+                @foreach (var title in Model.StoreTitle.OrderBy(t => t.Price))
+    {
+                
+                    @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", title.Text, title.Price), isChecked: false, htmlAttributes: new { id = "title" + title.Id, style = "margin-right:5px" })
+                    @Html.Label(string.Format("{0} : {1} MICoins", title.Text, title.Price))
+                    <script>
+                        $('#title' +@title.Id).change(function () {
+                            if (this.checked) {
+                                
+                            }
+                            else {
+                                
+                            }
+
+                        })
+                    </script>
+                <br/>
+}
+            
         </div>
         <div class="col-md-6">
             <h3>Avatar</h3>
             @foreach (var item in Model.StoreItems)
-            {
-                @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", item.Name, item.Price), isChecked: false, htmlAttributes: new { id = "item" + item.Id })
-            }
+    {
+
+        @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", item.Name, item.Price), isChecked: false, htmlAttributes: new { id = "item" + item.Id, style = "margin-right:5px" })
+        @Html.Label(string.Format("{0} : {1} MICoins", item.Name, item.Price))
+        <script>
+                        $('#item' +@item.Id).change(function () {
+                            if (this.checked) {
+
+                            }
+                            else {
+
+                            }
+
+                        })
+        </script>
+        <br />
+}
         </div>
     </div>
     <div class="row">
