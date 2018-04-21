@@ -24,7 +24,7 @@
                 }
                 @if (pseudo != null && pseudo.Length != 0)
                 {
-                    pseudostring = pseudo.ToString() ;
+                    pseudostring = System.Text.Encoding.Default.GetString(pseudo) ;
 
                 }
                 else

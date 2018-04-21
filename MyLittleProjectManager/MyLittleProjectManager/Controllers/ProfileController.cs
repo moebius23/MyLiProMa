@@ -4,14 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using MyLittleProjectManager.BusinessLayer;
 using MyLittleProjectManager.Data;
 using MyLittleProjectManager.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace MyLittleProjectManager.Controllers
 {
-	public class ProfileController : Controller
+    public class ProfileController : Controller
     {
 		private readonly ApplicationDbContext _context;
 
