@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyLittleProjectManager.Models
 {
-    public class Project
+	public class Project
     {
         public int Id { get; set; }
         public string Name { get; set; }
 		public string Description { get; set; }
 		public ObservableCollection<Column> Columns { get; set; }
+		public List<PlayerProject> PlayerProjects { get; set; }
 
-        public Project()
+		public Project()
         {
             Columns = new ObservableCollection<Column>();
+			PlayerProjects = new List<PlayerProject>();
         }
 
 		public override bool Equals(object obj)

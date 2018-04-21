@@ -24,13 +24,13 @@
 <div id="canva" class="profilavatarcanva">
     @if (Model.SelectedItems != null && Model.SelectedItems.ContainsKey(EItemType.Avatar))
     {
-        var path = Model.SelectedItems[EItemType.Avatar].ImageLink.ToString();
+        var path = Model.SelectedItems[EItemType.Avatar].Item.ImageLink.ToString();
         <img src=@(path) alt="Logo" class="profilavatar" />
         foreach (EItemType it in Enum.GetValues(typeof(EItemType)))
         {
             if (it != EItemType.Avatar)
             {
-                <img src=@Model.SelectedItems[it].ImageLink alt="Logo" class="profilavatar" />
+                <img src=@Model.SelectedItems[it].Item.ImageLink alt="Logo" class="profilavatar" />
             }
 
         }

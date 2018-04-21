@@ -51,19 +51,19 @@
     <div id="itemsList" class="col-md-1 profilcol">
         @if(Model.SelectedItems != null && Model.AvailableItems != null)
         {
-            foreach (Item item in Model.AvailableItems)
+            foreach (PlayerItem item in Model.AvailableItems)
             {
-                if(item.Type == EItemType.Avatar) { continue; }
+                if(item.Item.Type == EItemType.Avatar) { continue; }
 
-                if (Model.SelectedItems.ContainsKey(item.Type) && Model.SelectedItems[item.Type] == item)
+                if (Model.SelectedItems.ContainsKey(item.Item.Type) && Model.SelectedItems[item.Item.Type] == item)
                 {
-                    string path = item.ImageLink.ToString();
+                    string path = item.Item.ImageLink.ToString();
                     path = path.Insert(path.IndexOf('.'), "icon");
                     <img src=@(path) alt="Logo" class="profilitem selecteditem" />
                 }
                 else
                 {
-                    var path = item.ImageLink.ToString();
+                    var path = item.Item.ImageLink.ToString();
                     path = path.Insert(path.IndexOf('.'), "icon");
                     <img src=@(path) alt="Logo" class="profilitem" />
                 }

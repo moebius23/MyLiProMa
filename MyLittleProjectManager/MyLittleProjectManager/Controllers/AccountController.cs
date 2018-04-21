@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MyLittleProjectManager.BusinessLayer;
+using MyLittleProjectManager.Data;
 using MyLittleProjectManager.Models;
 using MyLittleProjectManager.Models.AccountViewModels;
 using MyLittleProjectManager.Services;
@@ -24,17 +26,20 @@ namespace MyLittleProjectManager.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+		private readonly ApplicationDbContext _context;
 
-        public AccountController(
+		public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+			ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+			_context = context;
         }
 
         [TempData]
@@ -232,7 +237,11 @@ namespace MyLittleProjectManager.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+
+					PlayerProfile pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName.Split('@')[0]);
+                    
+                    return RedirectToAction(actionName:"Index", controllerName:"Profile");
+                    //return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
             }

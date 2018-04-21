@@ -1,0 +1,84 @@
+﻿@model StoreViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Store</h2>
+
+@using (Html.BeginForm())
+{
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Titles</h3>
+            
+                @foreach (var title in Model.StoreTitle.OrderBy(t => t.Price))
+    {
+                
+                    @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", title.Text, title.Price), isChecked: false, htmlAttributes: new { id = "title" + title.Id, style = "margin-right:5px" })
+                    @Html.Label(string.Format("{0} : {1} MICoins", title.Text, title.Price))
+                    <script>
+                        $('#title' +@title.Id).change(function () {
+                            if (this.checked) {
+                                
+                            }
+                            else {
+                                
+                            }
+
+                        })
+                    </script>
+                <br/>
+}
+            
+        </div>
+        <div class="col-md-6">
+            <h3>Avatar</h3>
+            @foreach (var item in Model.StoreItems)
+    {
+
+        @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", item.Name, item.Price), isChecked: false, htmlAttributes: new { id = "item" + item.Id, style = "margin-right:5px" })
+        @Html.Label(string.Format("{0} : {1} MICoins", item.Name, item.Price))
+        <script>
+                        $('#item' +@item.Id).change(function () {
+                            if (this.checked) {
+
+                            }
+                            else {
+
+                            }
+
+                        })
+        </script>
+        <br />
+}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Inventory</h3>
+            <ul>
+                @foreach (var item in Model.BoughtItems.OrderBy(i => i.Type))
+                {
+                    <li>
+                        @item.Name
+                    </li>
+                }
+                @foreach (var title in Model.BoughtTitles)
+                {
+                    <li>
+                        @title.Text
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Shopkeeper</h3>
+            <h4>SelectedItems :</h4>
+            <ol id="selectedItemsList"></ol>
+            <h4>Price :</h4>
+            <p class="text-warning" id="price"></p>
+            <input />
+        </div>
+    </div>
+}
