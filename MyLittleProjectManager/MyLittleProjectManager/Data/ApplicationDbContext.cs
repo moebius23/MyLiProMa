@@ -9,9 +9,11 @@ namespace MyLittleProjectManager.Data
 		public virtual DbSet<Card> Cards { get; set; }
 		public virtual DbSet<Column> Columns { get; set; }
 		public virtual DbSet<Item> Items { get; set; }
-		public virtual DbSet<Project> Projects { get; set; }
+		public virtual DbSet<PlayerItem> PlayerItems { get; set; }
 		public virtual DbSet<PlayerProfile> PlayerProfiles { get; set; }
 		public virtual DbSet<PlayerProject> PlayerProjects { get; set; }
+		public virtual DbSet<PlayerTitle> PlayerTitles { get; set; }
+		public virtual DbSet<Project> Projects { get; set; }
 		public virtual DbSet<Title> Titles { get; set; }
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
