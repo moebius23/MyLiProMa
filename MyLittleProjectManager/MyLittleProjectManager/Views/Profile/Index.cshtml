@@ -18,12 +18,15 @@
         padding-left: auto;
         margin: auto;
     }
-    .profilavatar {
+    .profilavatarcontainer {
         background-color: #f9f9f9;
         height: 50vmin;
         width: 50vmin;
         text-align: center;
         margin: auto;
+    }
+    .profilavatar {
+        height: 50vmin;
     }
     .profilcol {
         background-color: #e3e3e3;
@@ -48,43 +51,66 @@
 </div>
 <div class="row row-eq-height">
     <div id="itemsList" class="col-md-1 profilcol">
-        @foreach(EItemType it in Enum.GetValues(typeof(EItemType)))
+        @foreach (EItemType it in Enum.GetValues(typeof(EItemType)))
         {
-            @if(it != EItemType.Avatar)
+            @if (it != EItemType.Avatar)
             {
-                <div class="profilitem square-box">
-                    @it.ToString()
-                </div>
-            }
+                if (Model.SelectedItems != null && Model.SelectedItems.ContainsKey(it))
+                {
+                    var path = Model.SelectedItems[it].ImageLink.ToString();
+                    <img src=@(path) alt="Logo" class="profilavatar" />
 
-        }
+                }
+                else
+                {
+
+                    var path = it.ToString().ToLower();
+                    path = "/images/assets/empty" + path;
+                    path += ".png";
+                    <div class="profilitem square-box">
+                        <img src=@(path) alt="Logo" class="img-responsive" />
+                    </div>
+                }
+             }
+
+         }
     </div>
     <div id="avatar" class="col-md-4 profilcol">
-        <div class="profilavatar">
-            Avatar
+        <div class="profilavatarcontainer">
+            @if (Model.SelectedItems != null && Model.SelectedItems.ContainsKey(EItemType.Avatar))
+            {
+                var path = Model.SelectedItems[EItemType.Avatar].ImageLink.ToString();
+                <img src=@(path) alt="Logo" class="profilavatar" />
+            }
+            else
+            {
+                <img src="~/images/logobw.png" alt="Logo" class="profilavatar" />
+            }
         </div>
     </div>
     <div id="info" class="col-md-6 profilcol">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th colspan="2"><span class="puttoleft">Account</span><button type="button" class="btn btn-primary puttoright">Edit</button></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Psoeudo</td>
-                    <td>@Model.Pseudo</td>
-                </tr>
-                <tr>
-                    <td>Email</td>
-                    <td>@User.Identity.Name</td>
-                </tr>
-                <tr>
-                    <td>MICoins</td>
-                    <td>@Model.MICoins</td>
-                </tr>
-            </tbody>
-        </table>
+        <form asp-area="" asp-controller="Manage" asp-action="Index" method="get" id="goToManageForm">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th colspan="2"><span class="puttoleft">Account</span><a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage" class="btn btn-primary puttoright" role="button">Edit</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Psoeudo</td>
+                        <td>@Model.Pseudo</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>@User.Identity.Name</td>
+                    </tr>
+                    <tr>
+                        <td>MICoins</td>
+                        <td>@Model.MICoins</td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
 </div>
