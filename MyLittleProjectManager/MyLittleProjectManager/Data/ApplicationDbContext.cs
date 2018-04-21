@@ -10,10 +10,14 @@ namespace MyLittleProjectManager.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+		public virtual DbSet<Card> Cards { get; set; }
+		public virtual DbSet<Column> Columns { get; set; }
+		public virtual DbSet<Item> Items { get; set; }
+		public virtual DbSet<Project> Projects { get; set; }
+		public virtual DbSet<PlayerProfile> PlayerProfiles { get; set; }
+		public virtual DbSet<Title> Titles { get; set; }
+
+		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
