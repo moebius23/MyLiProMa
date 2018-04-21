@@ -7,8 +7,12 @@
 
 <script>
     function CalculatePrice() {
-        $.each($("input"), function (idx,val) { 
+        var price = 0.0;
+        $.each($("input"), function (idx, val) {
+            if (val.price != null && val.price != "null") {
 
+
+            }
         });
 
     }
@@ -24,7 +28,7 @@
                 @foreach (var title in Model.StoreTitle.OrderBy(t => t.Price))
     {
                 
-                    @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", title.Text, title.Price), isChecked: false, htmlAttributes: new { id = "title" + title.Id, style = "margin-right:5px" })
+                    @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", title.Text, title.Price), isChecked: false, htmlAttributes: new { id = "title" + title.Id, style = "margin-right:5px",price=title.Price })
                     @Html.Label(string.Format("{0} : {1} MICoins", title.Text, title.Price))
                     <script>
                         $('#title' +@title.Id).change(function () {
@@ -46,7 +50,7 @@
             @foreach (var item in Model.StoreItems)
     {
 
-        @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", item.Name, item.Price), isChecked: false, htmlAttributes: new { id = "item" + item.Id, style = "margin-right:5px" })
+        @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", item.Name, item.Price), isChecked: false, htmlAttributes: new { id = "item" + item.Id, style = "margin-right:5px",price=item.Price })
         @Html.Label(string.Format("{0} : {1} MICoins", item.Name, item.Price))
         <script>
                         $('#item' +@item.Id).change(function () {
