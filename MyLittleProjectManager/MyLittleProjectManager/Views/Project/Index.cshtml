@@ -24,7 +24,12 @@
         text-align: center;
         text-decoration: underline;
     }
-
+    .MLPMBin{
+        min-height:50px;
+        border-radius: 3px 3px;
+        background-color:red;
+        margin:10px;
+    }
     .MLPMCardDesc {
     }
 
@@ -34,35 +39,44 @@
 </style>
 <script type="text/javascript">
 
-    function moveCard(cardId, newColumnId) {
-        //var divToBeWorkedOn = "#AjaxPlaceHolder";
-        var webMethod = "/Project/MoveCard?CardId=" + cardId + "&NewColumnId=" + newColumnId;
-        var parameters = "{'CardId':'" + cardId + "','NewColumnId':'" + newColumnId + "'}";
-
-        $.ajax({
-            type: "POST",
-            url: webMethod,
-            data: parameters,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (msg) {
-               
-            },
-            error: function (e) {
-               
-            }
-        });
-    }
+    
 
 
     $(document).ready(function () {
 
+
         loadProducts();
+
+        function moveCard(cardId, newColumnId, old, columnId, data) {
+            //var divToBeWorkedOn = "#AjaxPlaceHolder";
+            var webMethod = "/Project/MoveCard?CardId=" + cardId + "&NewColumnId=" + newColumnId;
+            var parameters = "{'CardId':'" + cardId + "','NewColumnId':'" + newColumnId + "'}";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    old.remove();
+                    var lst = $(columnId);
+                    //var li = "<li class=\"MLPMCard\" draggable=\"true\"><div class=\"MLPMCardTitle\">" + data.name + "</div><div class=\"MLPMCardDesc\">" + data.description + "</div></li>";
+                    //li.textContent = foreach;
+                    lst.append(data);
+                    setEvents();
+                },
+                error: function (e) {
+                    alert("Error : " + e.statusText)
+                }
+            });
+        }
+
         ///Function to load products using call to WEB API
         function loadProducts() {
             var items = "";
             $.ajax({
-                url: "Project/Columns/",
+                url: "Project/Columns/?projectId="+@Model.Id,
                 type: "GET"
             }).done(function (resp) {
                 $.each(resp, function (idx, val) {
@@ -88,8 +102,36 @@
                     evt.originalEvent.dataTransfer.setData("Text", evt.target.outerHTML);
                     evt.originalEvent.dataTransfer.setData("Id", evt.target.getAttribute("customId"));
                     //evt.target.draggable = false;
+
                 });
             });
+            $('#bin').off('drop');
+            $('#bin').on('drop', function (evt) {
+                evt.preventDefault();
+                var id = evt.originalEvent.dataTransfer.getData("Id");
+                var old = $("#card" + id);
+                var webMethod = "/Project/DeleteCard?CardId=" + id;
+                var parameters = "{'CardId':'" + id + "'}";
+
+                $.ajax({
+                    type: "POST",
+                    url: webMethod,
+                    data: parameters,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        old.remove();
+                    },
+                    error: function (e) {
+                        alert("Error");
+                    }
+                });
+            });
+            $("#bin").on('dragover');
+            $("#bin").on('dragover', function (evt) {
+                evt.preventDefault();
+            });
+
             @foreach(var column in Model.Columns)
                     {
                      <text>
@@ -100,13 +142,8 @@
                 var data = evt.originalEvent.dataTransfer.getData("Text");
                 var id = evt.originalEvent.dataTransfer.getData("Id");
                 var old = $("#card" + id);
-                moveCard(id,@column.Id);
-                old.remove();
-                var lst = $("#" + "@column.Name.Replace(" ","")");
-                //var li = "<li class=\"MLPMCard\" draggable=\"true\"><div class=\"MLPMCardTitle\">" + data.name + "</div><div class=\"MLPMCardDesc\">" + data.description + "</div></li>";
-                //li.textContent = foreach;
-                lst.append(data);
-                setEvents();
+                moveCard(id,@column.Id,old,"#" + "@column.Name.Replace(" ","")",data);
+
             });
             //The dragover
             $("#" + "@column.Name.Replace(" ", "")").on('dragover', function (evt) {
@@ -120,6 +157,15 @@
     });
 </script>
 <h2>@Model.Name</h2>
+<div class="row">
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-6">
+        <div class="MLPMBin" id="bin"></div>
+    </div>
+</div>
+
 <div class="row">
     @if (Model == null)
     {
