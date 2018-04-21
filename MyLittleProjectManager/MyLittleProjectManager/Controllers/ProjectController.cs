@@ -72,6 +72,15 @@ namespace MyLittleProjectManager.Controllers
 			return Json(CardId);
 		}
 
+        public JsonResult CreateCard(string name,string description)
+        {
+            Card card = new Card()
+            {
+                Name = name,
+                Description = description
+            };
+            return Json(card);
+        }
 
         public List<Column> Columns(int projectId)
         {
