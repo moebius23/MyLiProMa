@@ -11,25 +11,20 @@
         float: right;
     }
     #itemsList {
-        overflow: scroll;
+        overflow-y: scroll;
     }
     .profilitem {
         background-color: #f9f9f9;
-        height: 10vmin;
-        width: 10vmin;
+        height: 9vmin;
+        width: 9vmin;
         text-align: center;
         padding-left: auto;
         margin: auto;
     }
-    .profilavatarcanva {
-        background-color: #f9f9f9;
-        height: 50vmin;
-        width: 50vmin;
-        text-align: center;
-        margin: auto;
-    }
-    .profilavatar {
-        height: 50vmin;
+    .selecteditem{
+        border: solid;
+        border-color: #0026ff;
+        border-width: 2px;
     }
     .profilcol {
         background-color: #e3e3e3;
@@ -54,66 +49,52 @@
 </div>
 <div class="row row-eq-height">
     <div id="itemsList" class="col-md-1 profilcol">
-        @foreach (EItemType it in Enum.GetValues(typeof(EItemType)))
+        @if(Model.SelectedItems != null && Model.AvailableItems != null)
         {
-            @if (it != EItemType.Avatar)
+            foreach (PlayerItem item in Model.AvailableItems)
             {
-                if (Model.SelectedItems != null && Model.SelectedItems.ContainsKey(it))
-                {
-                    var path = Model.SelectedItems[it].ImageLink.ToString();
-                    <img src=@(path) alt="Logo" class="profilavatar" />
+                if(item.Item.Type == EItemType.Avatar) { continue; }
 
+                if (Model.SelectedItems.ContainsKey(item.Item.Type) && Model.SelectedItems[item.Item.Type] == item)
+                {
+                    string path = item.Item.ImageLink.ToString();
+                    path = path.Insert(path.IndexOf('.'), "icon");
+                    <img src=@(path) alt="Logo" class="profilitem selecteditem" />
                 }
                 else
                 {
-
-                    var path = it.ToString().ToLower();
-                    path = "/images/assets/empty" + path;
-                    path += ".png";
-                    <div class="profilitem square-box">
-                        <img src=@(path) alt="Logo" class="img-responsive" />
-                    </div>
+                    var path = item.Item.ImageLink.ToString();
+                    path = path.Insert(path.IndexOf('.'), "icon");
+                    <img src=@(path) alt="Logo" class="profilitem" />
                 }
-             }
+            }
 
-         }
+        }
     </div>
     <div id="avatar" class="col-md-4 profilcol">
-        <div class="profilavatarcanva">
-            @if (Model.SelectedItems != null && Model.SelectedItems.ContainsKey(EItemType.Avatar))
-            {
-                var path = Model.SelectedItems[EItemType.Avatar].ImageLink.ToString();
-                <img src=@(path) alt="Logo" class="profilavatar" />
-            }
-            else
-            {
-                <img src="~/images/logobw.png" alt="Logo" class="profilavatar" />
-            }
-        </div>
+        @await Html.PartialAsync("_AvatarPartial", Model)
     </div>
     <div id="info" class="col-md-6 profilcol">
-        <form asp-area="" asp-controller="Manage" asp-action="Index" method="get" id="goToManageForm">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th colspan="2"><span class="puttoleft">Account</span><a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage" class="btn btn-primary puttoright" role="button">Edit</a></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Psoeudo</td>
-                        <td>@Model.Pseudo</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>@User.Identity.Name</td>
-                    </tr>
-                    <tr>
-                        <td>MICoins</td>
-                        <td>@Model.MICoins</td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2"><a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage" class="puttoleft navbar-brand">Account</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pseudo</td>
+                    <td>@Model.Pseudo</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>@User.Identity.Name</td>
+                </tr>
+                <tr>
+                    <td>MICoins</td>
+                    <td>@Model.MICoins</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

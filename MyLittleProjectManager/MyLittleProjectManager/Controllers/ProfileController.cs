@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using MyLittleProjectManager.BusinessLayer;
 using MyLittleProjectManager.Data;
 using MyLittleProjectManager.Models;
+using Microsoft.AspNetCore.Http;
 using System.Linq;
 
 namespace MyLittleProjectManager.Controllers
 {
-	public class ProfileController : Controller
+    public class ProfileController : Controller
     {
 		private readonly ApplicationDbContext _context;
 
@@ -32,6 +33,8 @@ namespace MyLittleProjectManager.Controllers
 					.SingleOrDefault();
 			}
 			else pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName);
+
+            if (pp.Pseudo != null) { HttpContext.Session.SetString("Pseudo", pp.Pseudo); }
 
             return View(pp);
         }

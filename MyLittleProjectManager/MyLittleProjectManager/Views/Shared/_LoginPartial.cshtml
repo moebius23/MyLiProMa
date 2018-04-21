@@ -16,7 +16,23 @@
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                @{ 
+
+                    byte[] pseudo;
+                    Context.Session.TryGetValue("Pseudo", out pseudo);
+                    string pseudostring;
+                }
+                @if (pseudo != null && pseudo.Length != 0)
+                {
+                    pseudostring = System.Text.Encoding.Default.GetString(pseudo) ;
+
+                }
+                else
+                {
+                    pseudostring = "unnamed";
+
+                }
+                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @pseudostring!</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
