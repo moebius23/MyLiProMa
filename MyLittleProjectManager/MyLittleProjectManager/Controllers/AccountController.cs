@@ -239,8 +239,9 @@ namespace MyLittleProjectManager.Controllers
                     _logger.LogInformation("User created a new account with password.");
 
 					PlayerProfile pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName.Split('@')[0]);
-
-					return RedirectToLocal(returnUrl);
+                    
+                    return RedirectToAction(actionName:"Index", controllerName:"Profile");
+                    //return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
             }
