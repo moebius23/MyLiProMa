@@ -10,6 +10,9 @@
     .puttoright {
         float: right;
     }
+    #itemsList {
+        overflow: scroll;
+    }
     .profilitem {
         background-color: #f9f9f9;
         height: 10vmin;
@@ -18,7 +21,7 @@
         padding-left: auto;
         margin: auto;
     }
-    .profilavatarcontainer {
+    .profilavatarcanva {
         background-color: #f9f9f9;
         height: 50vmin;
         width: 50vmin;
@@ -76,7 +79,7 @@
          }
     </div>
     <div id="avatar" class="col-md-4 profilcol">
-        <div class="profilavatarcontainer">
+        <div class="profilavatarcanva">
             @if (Model.SelectedItems != null && Model.SelectedItems.ContainsKey(EItemType.Avatar))
             {
                 var path = Model.SelectedItems[EItemType.Avatar].ImageLink.ToString();
