@@ -1,0 +1,61 @@
+﻿@model Project
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .MLPMColumn {
+        background-color: dimgrey;
+        padding-bottom: 10px;
+        border-radius: 3px 3px;
+    }
+    .MLPMCard{
+        background-color:lightgray;
+        margin : 10px;
+        padding:5px;
+        border-radius:3px 3px;
+    }
+    .MLPMCardTitle{
+        margin:3px;
+        padding:2px;
+        text-align:center;
+        text-decoration:underline;
+    }
+    .MLPMCardDesc{}
+    .MLPMColumnName {
+        text-align: center;
+    }
+</style>
+
+<h2>@Model.Name</h2>
+<div class="row">
+    @if (Model == null)
+    {
+        <h3>No projects here</h3>
+    }
+    else
+    {
+        @foreach (var column in Model.Columns)
+        {
+            <div class="col-md-4">
+                <div class="MLPMColumn">
+                    <h3 class="MLPMColumnName">@column.Name</h3>
+                    @foreach (var card in column.Cards.OrderBy(c => c.Order))
+                    {
+                        <div class="MLPMCard">
+                            <div class="MLPMCardTitle">
+                                @card.Name
+                            </div>
+                            <div class="MLPMCardDesc">
+                                @card.Description
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        }
+    }
+</div>
+
+
