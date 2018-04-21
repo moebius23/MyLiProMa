@@ -46,6 +46,12 @@ namespace MyLittleProjectManager.Controllers
             };
             return View(project);
         }
+
+        public void MoveCard(int CardId, int NewColumnId)
+        {
+            Console.WriteLine(String.Format("Moving card {0} to column {1}",CardId,NewColumnId));
+        }
+
         public List<Column> Columns()
         {
             return new List<Column>()

@@ -34,6 +34,27 @@
 </style>
 <script type="text/javascript">
 
+    function moveCard(cardId, newColumnId) {
+        //var divToBeWorkedOn = "#AjaxPlaceHolder";
+        var webMethod = "/Project/MoveCard?CardId=" + cardId + "&NewColumnId=" + newColumnId;
+        var parameters = "{'CardId':'" + cardId + "','NewColumnId':'" + newColumnId + "'}";
+
+        $.ajax({
+            type: "POST",
+            url: webMethod,
+            data: parameters,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (msg) {
+               
+            },
+            error: function (e) {
+               
+            }
+        });
+    }
+
+
     $(document).ready(function () {
 
         loadProducts();
@@ -79,6 +100,7 @@
                 var data = evt.originalEvent.dataTransfer.getData("Text");
                 var id = evt.originalEvent.dataTransfer.getData("Id");
                 var old = $("#card" + id);
+                moveCard(id,@column.Id);
                 old.remove();
                 var lst = $("#" + "@column.Name.Replace(" ","")");
                 //var li = "<li class=\"MLPMCard\" draggable=\"true\"><div class=\"MLPMCardTitle\">" + data.name + "</div><div class=\"MLPMCardDesc\">" + data.description + "</div></li>";
