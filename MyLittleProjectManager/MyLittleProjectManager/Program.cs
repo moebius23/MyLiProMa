@@ -56,14 +56,26 @@ namespace MyLittleProjectManager
 							new Card()
 							{
 								Order = 0,
-								Name = "Create Data",
-								Description = "All your data are belong to us !"
+								Name = "Move a card",
+								Description = "Move this card to another column."
 							},
 							new Card()
 							{
 								Order = 1,
-								Name = "Process Data",
-								Description = "An army of monkeys is working on the data."
+								Name = "Delete a card",
+								Description = "Move this card to the trash bin. It's in the upper right corner of your screen."
+							},
+							new Card()
+							{
+								Order = 1,
+								Name = "Create a card",
+								Description = "Create a new card. It's in the upper left corner of your screen."
+							},
+							new Card()
+							{
+								Order = 1,
+								Name = "Go get your prize !",
+								Description = ""
 							}
 						}
 					},
