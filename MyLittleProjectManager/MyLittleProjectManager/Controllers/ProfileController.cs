@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyLittleProjectManager.BusinessLayer;
 using MyLittleProjectManager.Data;
 using MyLittleProjectManager.Models;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace MyLittleProjectManager.Controllers
 {
-    public class ProfileController : Controller
+	public class ProfileController : Controller
     {
 		private readonly ApplicationDbContext _context;
 
@@ -20,9 +18,9 @@ namespace MyLittleProjectManager.Controllers
 		}
 
 		[HttpGet]
-        [Authorize]
-        public IActionResult Index()
-        {
+		[Authorize]
+		public IActionResult Index()
+		{
 			var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 
 			PlayerProfile pp;
@@ -33,7 +31,8 @@ namespace MyLittleProjectManager.Controllers
 					.Include(p => p.AvailableTitles)
 					.SingleOrDefault();
 			}
-			else pp = new PlayerProfile();
+			else pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName.Split('@')[0]);
+
             return View(pp);
         }
     }

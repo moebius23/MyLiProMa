@@ -12,9 +12,10 @@ using System;
 namespace MyLittleProjectManager.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180421214701_jesaispluscequyadedans")]
+    partial class jesaispluscequyadedans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,7 +265,13 @@ namespace MyLittleProjectManager.Data.Migrations
 
                     b.Property<string>("SelectedItemsJson");
 
+                    b.Property<int?>("SelectedTitlePlayerId");
+
+                    b.Property<int?>("SelectedTitleTitleId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SelectedTitleTitleId", "SelectedTitlePlayerId");
 
                     b.ToTable("PlayerProfiles");
                 });
@@ -287,8 +294,6 @@ namespace MyLittleProjectManager.Data.Migrations
                     b.Property<int>("TitleId");
 
                     b.Property<int>("PlayerId");
-
-                    b.Property<bool>("IsSelected");
 
                     b.HasKey("TitleId", "PlayerId");
 
@@ -402,6 +407,13 @@ namespace MyLittleProjectManager.Data.Migrations
                         .WithMany("AvailableItems")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProfile", b =>
+                {
+                    b.HasOne("MyLittleProjectManager.Models.PlayerTitle", "SelectedTitle")
+                        .WithMany()
+                        .HasForeignKey("SelectedTitleTitleId", "SelectedTitlePlayerId");
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProject", b =>

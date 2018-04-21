@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MyLittleProjectManager.Models
 {
-    public class Title
+	public class Title
     {
 		public int Id { get; set; }
 		public int Price { get; set; }
         public string Text { get; set; }
+		public List<PlayerTitle> PlayerTitles { get; set; }
+
+		public Title()
+		{
+			PlayerTitles = new List<PlayerTitle>();
+		}
 
 		public override bool Equals(object obj)
 		{

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MyLittleProjectManager.Models
 {
 	public enum EItemType
 	{
 		Avatar,
-		Hat
+		Hat,
+		Glasses,
+		Tie,
+		Shoes,
+		Accessory
 	}
 
     public class Item
@@ -18,6 +19,12 @@ namespace MyLittleProjectManager.Models
         public string ImageLink { get; set; }
 		public int Price { get; set; }
 		public EItemType Type { get; set; }
+		public List<PlayerItem> PlayerItems { get; set; }
+
+		public Item()
+		{
+			PlayerItems = new List<PlayerItem>();
+		}
 
 		public override bool Equals(object obj)
 		{
