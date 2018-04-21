@@ -9,24 +9,90 @@
         padding-bottom: 10px;
         border-radius: 3px 3px;
     }
-    .MLPMCard{
-        background-color:lightgray;
-        margin : 10px;
-        padding:5px;
-        border-radius:3px 3px;
+
+    .MLPMCard {
+        background-color: lightgray;
+        margin: 10px;
+        padding: 5px;
+        border-radius: 3px 3px;
     }
-    .MLPMCardTitle{
-        margin:3px;
-        padding:2px;
-        text-align:center;
-        text-decoration:underline;
+
+    .MLPMCardTitle {
+        margin: 3px;
+        padding: 2px;
+        text-align: center;
+        text-decoration: underline;
     }
-    .MLPMCardDesc{}
+
+    .MLPMCardDesc {
+    }
+
     .MLPMColumnName {
         text-align: center;
     }
 </style>
+<script type="text/javascript">
+   
+    $(document).ready(function () {
 
+        loadProducts();
+        ///Function to load products using call to WEB API
+        function loadProducts() {
+            var items = "";
+            $.ajax({
+                url: "Project/Columns/",
+                type: "GET"
+            }).done(function (resp) {
+                $.each(resp, function (idx, val) {
+
+                    $.each(val.cards, function (id, valu) {
+                        items += "<li class=\"MLPMCard\" draggable=\"true\" customId=\""+ valu.id+"\" id=\"card"+valu.id+"\"><div class=\"MLPMCardTitle\">" + valu.name + "</div><div class=\"MLPMCardDesc\">" + valu.description + "</div></li>";
+                    });
+                    $("#" + val.name.replace(/\s/g, '')).html(items);
+                    items = "";
+                });
+                setEvents();
+            }).error(function (err) {
+                alert("Error! " + err.status);
+            });
+        }
+        //Function to set events for Drag-Drop
+        function setEvents() {
+            var lstCards = $('li');
+            //Set Drag on Each 'li' in the list
+            $.each(lstCards, function (idx, val) {
+                $('li').on('dragstart', function (evt) {
+                    evt.originalEvent.dataTransfer.setData("Text", evt.target.outerHTML);
+                    evt.originalEvent.dataTransfer.setData("Id", evt.target.getAttribute("customId"));
+                    //evt.target.draggable = false;
+                });
+            });
+            @foreach(var column in Model.Columns)
+                    {
+                     <text>
+            //Set the Drop on the <div>
+            $("#" + "@column.Name.Replace(" ","")").on('drop', function (evt) {
+                evt.preventDefault();
+                var data = evt.originalEvent.dataTransfer.getData("Text");
+                var id = evt.originalEvent.dataTransfer.getData("Id");
+                var old = $("#card" + id);
+                old.remove();
+                var lst = $("#" + "@column.Name.Replace(" ","")");
+                //var li = "<li class=\"MLPMCard\" draggable=\"true\"><div class=\"MLPMCardTitle\">" + data.name + "</div><div class=\"MLPMCardDesc\">" + data.description + "</div></li>";
+                //li.textContent = foreach;
+                lst.append(data);
+            });
+            //The dragover
+            $("#" + "@column.Name.Replace(" ", "")").on('dragover', function (evt) {
+                evt.preventDefault();
+            });
+
+                </text>
+                    }
+            
+        }
+    });
+</script>
 <h2>@Model.Name</h2>
 <div class="row">
     @if (Model == null)
@@ -40,17 +106,19 @@
             <div class="col-md-4">
                 <div class="MLPMColumn">
                     <h3 class="MLPMColumnName">@column.Name</h3>
-                    @foreach (var card in column.Cards.OrderBy(c => c.Order))
-                    {
-                        <div class="MLPMCard">
-                            <div class="MLPMCardTitle">
-                                @card.Name
-                            </div>
-                            <div class="MLPMCardDesc">
-                                @card.Description
-                            </div>
-                        </div>
-                    }
+                    <ol id="@column.Name.Replace(" ","")">
+                        @*@foreach (var card in column.Cards.OrderBy(c => c.Order))
+                                {
+                                                <li class="MLPMCard" draggable="true">
+                                                    <div class="MLPMCardTitle">
+                                                        @card.Name
+                                                    </div>
+                                                    <div class="MLPMCardDesc">
+                                                        @card.Description
+                                                    </div>
+                                                </li>
+                            }*@
+                    </ol>
                 </div>
             </div>
 
