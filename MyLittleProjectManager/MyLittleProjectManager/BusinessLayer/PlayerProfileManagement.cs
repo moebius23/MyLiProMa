@@ -17,10 +17,13 @@ namespace MyLittleProjectManager.BusinessLayer
 			_context = context;
 		}
 
-		public PlayerProfile CreatePlayerProfile(string pseudo)
+		public PlayerProfile CreatePlayerProfile(string userName)
 		{
-			PlayerProfile playerProfile = new PlayerProfile() { Pseudo = pseudo };
+			PlayerProfile playerProfile = new PlayerProfile() { Pseudo = userName.Split('@')[0] };
 			_context.PlayerProfiles.Add(playerProfile);
+
+			var user = _context.Users.SingleOrDefault(u => u.UserName.Equals(userName));
+			user.PlayerProfile = playerProfile;
 
 			Title title = _context.Titles.FirstOrDefault(t => t.Text.Equals("Noob"));
 			PlayerTitle PlayerTitle = new PlayerTitle() { Player = playerProfile, Title = title, IsSelected = true };

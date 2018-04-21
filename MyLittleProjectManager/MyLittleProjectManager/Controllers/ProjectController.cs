@@ -29,24 +29,26 @@ namespace MyLittleProjectManager.Controllers
 		public JsonResult MoveCard(int CardId, int NewColumnId, string name = "", string description = "")
 		{
 			Console.WriteLine(String.Format("Moving card {0} to column {1}", CardId, NewColumnId));
+						  
+			var player = (_context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault()).PlayerProfile;
 
 			Card movingCard;
-			if (CardId == -1)
+			if (CardId == -1) // Create card
 			{
-				movingCard = new Card()
-				{
-					Name = name,
-					Description = description
-				};
+				movingCard = new Card() { Name = name, Description = description };
 				_context.Cards.Add(movingCard);
+
+				player.MICoins += 5;
 			}
-			else
+			else // Move card
 			{
 				movingCard = _context.Cards.SingleOrDefault(c => c.Id == CardId);
 
 				Column oldColumn = _context.Columns.Where(col => col.Cards.Any(card => card.Id == movingCard.Id)).SingleOrDefault();
 				oldColumn.Cards.Remove(movingCard);
 				foreach (var card in oldColumn.Cards) if (card.Order > movingCard.Order) card.Order--;
+
+				player.MICoins += 3;
 			}
 
 			Column newColumn = _context.Columns.SingleOrDefault(c => c.Id == NewColumnId);
@@ -65,6 +67,9 @@ namespace MyLittleProjectManager.Controllers
 			Card deletingCard = _context.Cards.SingleOrDefault(c => c.Id == CardId);
 			Column column = _context.Columns.Where(c => c.Cards.Any(card => card.Id == deletingCard.Id)).SingleOrDefault();
 			foreach (var card in column.Cards) if (card.Order > deletingCard.Order) card.Order--;
+
+			var player = (_context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault()).PlayerProfile;
+			player.MICoins += 1;
 
 			_context.Cards.Remove(deletingCard);
 			_context.SaveChanges();

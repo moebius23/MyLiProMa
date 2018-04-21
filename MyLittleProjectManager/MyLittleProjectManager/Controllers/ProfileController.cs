@@ -31,7 +31,7 @@ namespace MyLittleProjectManager.Controllers
 					.Include(p => p.AvailableTitles)
 					.SingleOrDefault();
 			}
-			else pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName.Split('@')[0]);
+			else pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName);
 
             return View(pp);
         }

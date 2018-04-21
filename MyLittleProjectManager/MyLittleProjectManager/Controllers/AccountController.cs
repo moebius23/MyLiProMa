@@ -238,7 +238,7 @@ namespace MyLittleProjectManager.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
 
-					PlayerProfile pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName.Split('@')[0]);
+					PlayerProfile pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName);
                     
                     return RedirectToAction(actionName:"Index", controllerName:"Profile");
                     //return RedirectToLocal(returnUrl);
