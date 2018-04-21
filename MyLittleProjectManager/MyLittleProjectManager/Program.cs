@@ -75,7 +75,7 @@ namespace MyLittleProjectManager
 							{
 								Order = 1,
 								Name = "Go get your prize !",
-								Description = ""
+								Description = "The link to the store is in the top menu."
 							}
 						}
 					},
