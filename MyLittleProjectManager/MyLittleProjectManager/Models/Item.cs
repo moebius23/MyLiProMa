@@ -18,6 +18,12 @@ namespace MyLittleProjectManager.Models
         public string ImageLink { get; set; }
 		public int Price { get; set; }
 		public EItemType Type { get; set; }
+		public List<PlayerItem> PlayerItems { get; set; }
+
+		public Item()
+		{
+			PlayerItems = new List<PlayerItem>();
+		}
 
 		public override bool Equals(object obj)
 		{

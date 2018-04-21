@@ -20,9 +20,9 @@ namespace MyLittleProjectManager.Controllers
 		}
 
 		[HttpGet]
-        [Authorize]
-        public IActionResult Index()
-        {
+		[Authorize]
+		public IActionResult Index()
+		{
 			var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 
 			PlayerProfile pp;
@@ -33,7 +33,15 @@ namespace MyLittleProjectManager.Controllers
 					.Include(p => p.AvailableTitles)
 					.SingleOrDefault();
 			}
-			else pp = new PlayerProfile();
+			else
+			{
+				pp = new PlayerProfile()
+				{
+					Pseudo = user.UserName.Split('@')[0]
+				};
+				_context.PlayerProfiles.Add(pp);
+				_context.SaveChanges();
+			}
             return View(pp);
         }
     }

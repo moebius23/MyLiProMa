@@ -12,22 +12,24 @@ namespace MyLittleProjectManager.Models
         public int Id { get; set; }
 		public string Pseudo { get; set; }
 		public int MICoins { get; set; }
+		public List<PlayerProject> PlayerProjects { get; set; }
 
 		[NotMapped]
-		public Dictionary<EItemType, Item> SelectedItems { get; set; }
+		public Dictionary<EItemType, PlayerItem> SelectedItems { get; set; }
 		public string SelectedItemsJson {
 			get { return JsonConvert.SerializeObject(SelectedItems); }
-			set { SelectedItems = JsonConvert.DeserializeObject<Dictionary<EItemType, Item>>(value); }
+			set { SelectedItems = JsonConvert.DeserializeObject<Dictionary<EItemType, PlayerItem>>(value); }
 		}
-		public List<Item> AvailableItems { get; set; }
+		public List<PlayerItem> AvailableItems { get; set; }
 
-        public Title SelectedTitle { get; set; }
-        public List<Title> AvailableTitles { get; set; }
+        public PlayerTitle SelectedTitle { get; set; }
+        public List<PlayerTitle> AvailableTitles { get; set; }
 
         public PlayerProfile()
         {
-            AvailableItems = new List<Item>();
-            AvailableTitles = new List<Title>();
+            AvailableItems = new List<PlayerItem>();
+            AvailableTitles = new List<PlayerTitle>();
+			PlayerProjects = new List<PlayerProject>();
         }
 
 		public override bool Equals(object obj)

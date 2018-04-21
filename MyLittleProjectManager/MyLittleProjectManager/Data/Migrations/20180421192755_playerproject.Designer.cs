@@ -12,9 +12,10 @@ using System;
 namespace MyLittleProjectManager.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180421192755_playerproject")]
+    partial class playerproject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,26 +232,17 @@ namespace MyLittleProjectManager.Data.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("PlayerProfileId");
+
                     b.Property<int>("Price");
 
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlayerProfileId");
+
                     b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerItem", b =>
-                {
-                    b.Property<int>("ItemId");
-
-                    b.Property<int>("PlayerId");
-
-                    b.HasKey("ItemId", "PlayerId");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("PlayerItem");
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProfile", b =>
@@ -264,13 +256,11 @@ namespace MyLittleProjectManager.Data.Migrations
 
                     b.Property<string>("SelectedItemsJson");
 
-                    b.Property<int?>("SelectedTitlePlayerId");
-
-                    b.Property<int?>("SelectedTitleTitleId");
+                    b.Property<int?>("SelectedTitleId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SelectedTitleTitleId", "SelectedTitlePlayerId");
+                    b.HasIndex("SelectedTitleId");
 
                     b.ToTable("PlayerProfiles");
                 });
@@ -286,19 +276,6 @@ namespace MyLittleProjectManager.Data.Migrations
                     b.HasIndex("PlayerId");
 
                     b.ToTable("PlayerProjects");
-                });
-
-            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerTitle", b =>
-                {
-                    b.Property<int>("TitleId");
-
-                    b.Property<int>("PlayerId");
-
-                    b.HasKey("TitleId", "PlayerId");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("PlayerTitle");
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.Project", b =>
@@ -320,11 +297,15 @@ namespace MyLittleProjectManager.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("PlayerProfileId");
+
                     b.Property<int>("Price");
 
                     b.Property<string>("Text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PlayerProfileId");
 
                     b.ToTable("Titles");
                 });
@@ -395,24 +376,18 @@ namespace MyLittleProjectManager.Data.Migrations
                         .HasForeignKey("ProjectId");
                 });
 
-            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerItem", b =>
+            modelBuilder.Entity("MyLittleProjectManager.Models.Item", b =>
                 {
-                    b.HasOne("MyLittleProjectManager.Models.Item", "Item")
-                        .WithMany("PlayerItems")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile", "Player")
+                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile")
                         .WithMany("AvailableItems")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PlayerProfileId");
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProfile", b =>
                 {
-                    b.HasOne("MyLittleProjectManager.Models.PlayerTitle", "SelectedTitle")
+                    b.HasOne("MyLittleProjectManager.Models.Title", "SelectedTitle")
                         .WithMany()
-                        .HasForeignKey("SelectedTitleTitleId", "SelectedTitlePlayerId");
+                        .HasForeignKey("SelectedTitleId");
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProject", b =>
@@ -428,17 +403,11 @@ namespace MyLittleProjectManager.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerTitle", b =>
+            modelBuilder.Entity("MyLittleProjectManager.Models.Title", b =>
                 {
-                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile", "Player")
+                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile")
                         .WithMany("AvailableTitles")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MyLittleProjectManager.Models.Title", "Title")
-                        .WithMany("PlayerTitles")
-                        .HasForeignKey("TitleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PlayerProfileId");
                 });
 #pragma warning restore 612, 618
         }

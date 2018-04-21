@@ -10,6 +10,12 @@ namespace MyLittleProjectManager.Models
 		public int Id { get; set; }
 		public int Price { get; set; }
         public string Text { get; set; }
+		public List<PlayerTitle> PlayerTitles { get; set; }
+
+		public Title()
+		{
+			PlayerTitles = new List<PlayerTitle>();
+		}
 
 		public override bool Equals(object obj)
 		{
