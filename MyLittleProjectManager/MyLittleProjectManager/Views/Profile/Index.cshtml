@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Profile";
+}
+@model PlayerProfile
+
+<style>
+    .puttoleft{
+        float:left;
+    }
+    .puttoright {
+        float: right;
+    }
+    .profilitem {
+        background-color: #f9f9f9;
+        height: 10vmin;
+        width: 10vmin;
+        text-align: center;
+        padding-left: auto;
+        margin: auto;
+    }
+    .profilavatar {
+        background-color: #f9f9f9;
+        height: 50vmin;
+        width: 50vmin;
+        text-align: center;
+        margin: auto;
+    }
+    .profilcol {
+        background-color: #e3e3e3;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        border-radius: 5px;
+        margin: 5px;
+        height: auto;
+    }
+    .row-eq-height {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <h1>Profile of @Model.Pseudo</h1>
+    </div>
+</div>
+<div class="row row-eq-height">
+    <div id="itemsList" class="col-md-1 profilcol">
+        @foreach(EItemType it in Enum.GetValues(typeof(EItemType)))
+        {
+            @if(it != EItemType.Avatar)
+            {
+                <div class="profilitem square-box">
+                    @it.ToString()
+                </div>
+            }
+
+        }
+    </div>
+    <div id="avatar" class="col-md-4 profilcol">
+        <div class="profilavatar">
+            Avatar
+        </div>
+    </div>
+    <div id="info" class="col-md-6 profilcol">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2"><span class="puttoleft">Account</span><button type="button" class="btn btn-primary puttoright">Edit</button></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Psoeudo</td>
+                    <td>@Model.Pseudo</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>@User.Identity.Name</td>
+                </tr>
+                <tr>
+                    <td>MICoins</td>
+                    <td>@Model.MICoins</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
