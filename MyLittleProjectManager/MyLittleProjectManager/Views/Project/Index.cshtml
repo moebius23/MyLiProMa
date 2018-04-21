@@ -24,32 +24,53 @@
         text-align: center;
         text-decoration: underline;
     }
-    .MLPMBin{
-        min-height:50px;
+    .MLPMBin {
+        height: 130px;
+        width: 100%;
+        margin: 10px;
         border-radius: 3px 3px;
-        background-color:red;
-        margin:10px;
+        background-color: red;
     }
     .MLPMCardDesc {
     }
-
+    .MLPMCardCreator {
+        background-color: forestgreen;
+        margin: 10px;
+        min-height: 130px;
+        height:100%;
+        border-radius: 3px 3px;
+    } 
     .MLPMColumnName {
         text-align: center;
     }
 </style>
 <script type="text/javascript">
-
     
-
-
     $(document).ready(function () {
 
 
         loadProducts();
 
+        $('#newCardName').on('input', function (evt) {
+            $('#newName').html($('#newCardName').val());
+            
+        });
+        $('#newCardDescription').on('input', function (evt) {
+            $('#newDescription').html($('#newCardDescription').val());
+
+        });
+
         function moveCard(cardId, newColumnId, old, columnId, data) {
             //var divToBeWorkedOn = "#AjaxPlaceHolder";
-            var webMethod = "/Project/MoveCard?CardId=" + cardId + "&NewColumnId=" + newColumnId;
+            var webMethod = "";
+            if (cardId != null && cardId !== undefined && cardId != "null") {
+
+                webMethod = "/Project/MoveCard?CardId=" + cardId + "&NewColumnId=" + newColumnId;
+            } else {
+                webMethod = "/Project/MoveCard?CardId=-1&NewColumnId=" + newColumnId + "&name=" + $('#newCardName').val() + "&description=" + $('#newCardDescription').val();
+
+            }
+            
             var parameters = "{'CardId':'" + cardId + "','NewColumnId':'" + newColumnId + "'}";
 
             $.ajax({
@@ -59,6 +80,11 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (msg) {
+                    if (msg.oldId != msg.newId) {
+                        data = data.replace("<li ", "<li id=\"card" + msg.newId + "\" customId=\"" + msg.newId + "\" ");
+                        data = data.replace("id=\"newName\"","");
+                        data = data.replace("id=\"newDescription\"","");
+                    }
                     old.remove();
                     var lst = $(columnId);
                     //var li = "<li class=\"MLPMCard\" draggable=\"true\"><div class=\"MLPMCardTitle\">" + data.name + "</div><div class=\"MLPMCardDesc\">" + data.description + "</div></li>";
@@ -159,10 +185,30 @@
 <h2>@Model.Name</h2>
 <div class="row">
     <div class="col-md-6">
-
+        <div class="MLPMCardCreator">
+            <div class="col-md-6">
+                <p>Name :</p>
+                <input accept="text" id="newCardName"/>
+                <p>Description :</p>
+                <input accept="text" id="newCardDescription"/>
+            </div>
+            <div class="col-md-6">
+                <li class="MLPMCard" draggable="true">
+                    <div class="MLPMCardTitle" id="newName">
+                        Empty
+                    </div>
+                    <div class="MLPMCardDesc" id="newDescription">
+                        Empty
+                    </div>
+                </li>
+            </div>
+        </div>
+        
     </div>
     <div class="col-md-6">
-        <div class="MLPMBin" id="bin"></div>
+        <div class="MLPMBin" id="bin">
+            <img src="~/images/iconesbin.png" asp-append-version="true" style="max-height:130px;margin-left:auto;margin-right:auto;display:block"/>
+        </div>
     </div>
 </div>
 

@@ -47,10 +47,14 @@ namespace MyLittleProjectManager.Controllers
             return View(project);
         }
 
-        public JsonResult MoveCard(int CardId, int NewColumnId)
+        public JsonResult MoveCard(int CardId, int NewColumnId,string name = "",string description="")
         {
             Console.WriteLine(String.Format("Moving card {0} to column {1}",CardId,NewColumnId));
-            return Json(CardId);
+            if(CardId == -1)
+            {
+                return Json(new { oldId = -1, newId = 42 });
+            }
+            return Json(new {oldId = CardId, newId= CardId });
         }
         public JsonResult DeleteCard(int CardId)
         {
@@ -58,6 +62,15 @@ namespace MyLittleProjectManager.Controllers
             return Json(CardId);
         }
 
+        public JsonResult CreateCard(string name,string description)
+        {
+            Card card = new Card()
+            {
+                Name = name,
+                Description = description
+            };
+            return Json(card);
+        }
 
         public List<Column> Columns(int projectId)
         {
