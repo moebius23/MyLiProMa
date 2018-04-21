@@ -17,5 +17,27 @@ namespace MyLittleProjectManager.Models
         {
             Cards = new ObservableCollection<Card>();
         }
-    }
+
+		public override bool Equals(object obj)
+		{
+			var column = obj as Column;
+			return column != null &&
+				   Id == column.Id;
+		}
+
+		public override int GetHashCode()
+		{
+			return 2108858624 + Id.GetHashCode();
+		}
+
+		public static bool operator ==(Column column1, Column column2)
+		{
+			return EqualityComparer<Column>.Default.Equals(column1, column2);
+		}
+
+		public static bool operator !=(Column column1, Column column2)
+		{
+			return !(column1 == column2);
+		}
+	}
 }
