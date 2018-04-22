@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MyLittleProjectManager.Models
 {
-    public class ItemsBoughtViewModel
+	public class ItemsBoughtViewModel
     {
         public List<int> ItemsId { get; set; }
         public List<int> TitlesId { get; set; }

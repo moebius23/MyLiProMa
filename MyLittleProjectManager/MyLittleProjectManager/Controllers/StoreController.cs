@@ -4,6 +4,7 @@ using MyLittleProjectManager.Data;
 using MyLittleProjectManager.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace MyLittleProjectManager.Controllers
 {
@@ -55,11 +56,46 @@ namespace MyLittleProjectManager.Controllers
 
             return View(storeViewModel);
         }
-        [HttpPost]
+
+		[HttpPost]
         public IActionResult Index(ItemsBoughtViewModel itemsBoughtViewModel)
         {
-
-            return RedirectToAction("Index");
+			var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+			PlayerProfile pp = _context.PlayerProfiles.Where(p => p == user.PlayerProfile)
+					.Include(p => p.AvailableItems)
+					.Include(p => p.AvailableTitles)
+					.SingleOrDefault();
+								  
+			foreach (var itemId in itemsBoughtViewModel.ItemsId)
+			{
+				Item item = _context.Items.SingleOrDefault(i => i.Id == itemId);
+				if (item != null)
+				{
+					if (pp.MICoins - item.Price >= 0)
+					{
+						pp.MICoins -= item.Price;
+						PlayerItem playerItem = new PlayerItem() { Item = item, Player = pp };
+						pp.AvailableItems.Add(playerItem);
+					}
+					else return StatusCode(402);
+				}
+			}
+			foreach (var titleId in itemsBoughtViewModel.TitlesId)
+			{
+				Title title = _context.Titles.SingleOrDefault(i => i.Id == titleId);
+				if (title != null)
+				{
+					if (pp.MICoins - title.Price >= 0)
+					{
+						pp.MICoins -= title.Price;
+						PlayerTitle playerTitle = new PlayerTitle() { Title = title, Player = pp };
+						pp.AvailableTitles.Add(playerTitle);
+					}
+					else return StatusCode(402);
+				}
+			}
+			_context.SaveChanges();
+			return RedirectToAction("Index");
         }
 
     }
