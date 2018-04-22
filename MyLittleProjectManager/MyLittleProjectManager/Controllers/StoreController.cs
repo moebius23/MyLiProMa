@@ -18,7 +18,7 @@ namespace MyLittleProjectManager.Controllers
 
         public IActionResult Index()
         {
-            //List<PlayerProfile> profiles = _context.PlayerProfiles.ToList();
+            List<PlayerProfile> profiles = _context.PlayerProfiles.ToList();
             List<Item> items = _context.Items.ToList();
             List<Title> titles = _context.Titles.ToList();
 
