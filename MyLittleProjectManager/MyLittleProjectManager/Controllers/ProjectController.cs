@@ -62,6 +62,7 @@ namespace MyLittleProjectManager.Controllers
 
         public JsonResult DeleteCard(int CardId)
         {
+            var profiles = _context.PlayerProfiles.ToList();
             Console.WriteLine(String.Format("Deleting card {0}", CardId));
 
 			Card deletingCard = _context.Cards.SingleOrDefault(c => c.Id == CardId);
