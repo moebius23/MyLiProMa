@@ -23,6 +23,7 @@ namespace MyLittleProjectManager.Controllers
 		[Authorize]
 		public IActionResult Index()
 		{
+            var profiles = _context.PlayerProfiles.ToList();
 			var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 
 			PlayerProfile pp;

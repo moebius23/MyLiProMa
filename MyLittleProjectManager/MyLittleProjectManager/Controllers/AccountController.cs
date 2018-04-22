@@ -70,6 +70,7 @@ namespace MyLittleProjectManager.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    return RedirectToAction("Index", "Profile");
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -84,6 +85,7 @@ namespace MyLittleProjectManager.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    
                     return View(model);
                 }
             }
