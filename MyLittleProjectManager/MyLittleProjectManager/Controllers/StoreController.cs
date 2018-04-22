@@ -55,5 +55,6 @@ namespace MyLittleProjectManager.Controllers
 
             return View(storeViewModel);
         }
-    }
+
+	}
 }
