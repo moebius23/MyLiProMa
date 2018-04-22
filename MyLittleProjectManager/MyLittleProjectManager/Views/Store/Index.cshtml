@@ -2,18 +2,25 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<style>
+    .theClass{}
+</style>
 <h2>Store</h2>
 
 <script>
     function CalculatePrice() {
         var price = 0.0;
-        $.each($("input"), function (idx, val) {
-            if (val.price != null && val.price != "null") {
-
-
+        var nbr = 0;
+        $.each($('.theClass:checkbox:checked'), function (idx, val) {
+            //var input = $(this); 
+            if (val.title != null && val.title != "null") {
+                
+                    price += Number(val.title);
+                    nbr++;
+                
             }
         });
+        $('#price').html(nbr + " items for "+ price + " MICoins");
 
     }
 </script>
@@ -28,10 +35,11 @@
                 @foreach (var title in Model.StoreTitle.OrderBy(t => t.Price))
     {
                 
-                    @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", title.Text, title.Price), isChecked: false, htmlAttributes: new { id = "title" + title.Id, style = "margin-right:5px",price=title.Price })
+                    @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", title.Text, title.Price), isChecked: false, htmlAttributes: new { id = "title" + title.Id, style = "margin-right:5px",price=title.Price,title= title.Price,Class= "theClass" })
                     @Html.Label(string.Format("{0} : {1} MICoins", title.Text, title.Price))
                     <script>
                         $('#title' +@title.Id).change(function () {
+                            CalculatePrice();
                             if (this.checked) {
                                 
                             }
@@ -50,10 +58,11 @@
             @foreach (var item in Model.StoreItems)
     {
 
-        @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", item.Name, item.Price), isChecked: false, htmlAttributes: new { id = "item" + item.Id, style = "margin-right:5px",price=item.Price })
+        @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", item.Name, item.Price), isChecked: false, htmlAttributes: new { id = "item" + item.Id, style = "margin-right:5px",price=item.Price, title = item.Price, Class = "theClass" })
         @Html.Label(string.Format("{0} : {1} MICoins", item.Name, item.Price))
         <script>
                         $('#item' +@item.Id).change(function () {
+                            CalculatePrice();
                             if (this.checked) {
 
                             }
@@ -71,16 +80,16 @@
         <div class="col-md-6">
             <h3>Inventory</h3>
             <ul>
-                @foreach (var item in Model.BoughtItems.OrderBy(i => i.Type))
+                @foreach (var item in Model.Profile.AvailableItems.OrderBy(i => i.Item.Type))
                 {
                     <li>
-                        @item.Name
+                        @item.Item.Name
                     </li>
                 }
-                @foreach (var title in Model.BoughtTitles)
+                @foreach (var title in Model.Profile.AvailableTitles)
                 {
                     <li>
-                        @title.Text
+                        @title.Title.Text
                     </li>
                 }
             </ul>
