@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyLittleProjectManager.Data;
 using MyLittleProjectManager.Models;
-using MyLittleProjectManager.Models.ViewModels;
+//using MyLittleProjectManager.Models.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,6 +22,11 @@ namespace MyLittleProjectManager.Controllers
 		[Authorize]
 		public IActionResult Index()
         {
+            var profiles = _context.PlayerProfiles.ToList();
+            var playertitles = _context.PlayerTitles.ToList();
+            var titles = _context.Titles.ToList();
+            var playerItems = _context.PlayerItems.ToList();
+            var items = _context.Items.ToList();
 			List<PlayerProfile> playerProfiles = _context.PlayerProfiles
 				.Include(p => p.AvailableTitles)
 				.Include(p => p.AvailableItems)

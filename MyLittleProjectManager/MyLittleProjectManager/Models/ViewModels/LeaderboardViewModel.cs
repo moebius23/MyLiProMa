@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyLittleProjectManager.Models.ViewModels
+namespace MyLittleProjectManager.Models
 {
     public class LeaderboardViewModel
     {
