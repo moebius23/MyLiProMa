@@ -13,7 +13,7 @@
 
             var webMethod = "/Store/Index";
 
-            var parameters = "{\"ItemsId\":\"[";
+            var parameters = "{\"ItemsId\":[";
             
             $.each($('.theClass:checkbox:checked'), function (idx, val) {
                 //var input = $(this);
@@ -29,7 +29,7 @@
                 parameters = parameters.substr(0, parameters.length - 1);
             }
             
-            parameters = parameters.concat("]\",\"TitlesId\":\"[");
+            parameters = parameters.concat("],\"TitlesId\":[");
             $.each($('.theClass:checkbox:checked'), function (idx, val) {
                 //var input = $(this);
                 if (val.title != null && val.title != "null") {
@@ -43,7 +43,7 @@
 
                 parameters = parameters.substr(0, parameters.length - 1);
             }
-            parameters = parameters.concat("]\"}");
+            parameters = parameters.concat("]}");
             webMethod = webMethod + "?itemsBoughtViewModel=\"" + parameters+"\"";
             $.ajax({
                 type: "POST",
