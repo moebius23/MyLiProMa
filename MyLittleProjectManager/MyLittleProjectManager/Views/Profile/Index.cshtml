@@ -4,15 +4,18 @@
 @model PlayerProfile
 
 <style>
-    .puttoleft{
-        float:left;
+    .puttoleft {
+        float: left;
     }
+
     .puttoright {
         float: right;
     }
+
     #itemsList {
         overflow-y: scroll;
     }
+
     .profilitem {
         background-color: #f9f9f9;
         height: 9vmin;
@@ -21,11 +24,13 @@
         padding-left: auto;
         margin: auto;
     }
-    .selecteditem{
+
+    .selecteditem {
         border: solid;
         border-color: #0026ff;
         border-width: 2px;
     }
+
     .profilcol {
         background-color: #e3e3e3;
         padding-top: 10px;
@@ -35,6 +40,7 @@
         margin: 5px;
         height: auto;
     }
+
     .row-eq-height {
         display: -webkit-box;
         display: -webkit-flex;
@@ -42,6 +48,14 @@
         display: flex;
     }
 </style>
+<script>
+    var listOfItems = [];
+    var elementId = 0;
+    var tempItem = {};
+</script>
+<form asp-area="" asp-controller="Profile" asp-action="Index" method="post" id="profileForm">
+
+</form>
 <div class="row">
     <div class="col-md-12">
         <h1>Profile of @Model.Pseudo</h1>
@@ -49,25 +63,51 @@
 </div>
 <div class="row row-eq-height">
     <div id="itemsList" class="col-md-1 profilcol">
-        @if(Model.SelectedItems != null && Model.AvailableItems != null)
+        @if (Model.SelectedItems != null && Model.AvailableItems != null)
         {
             foreach (PlayerItem item in Model.AvailableItems)
             {
-                if(item.Item.Type == EItemType.Avatar) { continue; }
+                if (item.Item.Type == EItemType.Avatar) { continue; }
 
-                if (Model.SelectedItems.ContainsKey(item.Item.Type) && Model.SelectedItems[item.Item.Type] == item)
+                if (Model.SelectedItems.ContainsKey(item.Item.Type) && Model.SelectedItems[item.Item.Type].Item.Id == item.Item.Id)
                 {
                     string path = item.Item.ImageLink.ToString();
                     path = path.Insert(path.IndexOf('.'), "icon");
-                    <img src=@(path) alt="Logo" class="profilitem selecteditem" />
+                    <img src=@(path) alt="Logo" id=@("item" + item.Item.Id) class="profilitem selecteditem" />
+                    <script>
+                        tempItem = {Id:@item.Item.Id, Type:"@(item.Item.Type)", Selected:true};
+                    </script>
                 }
                 else
                 {
                     var path = item.Item.ImageLink.ToString();
                     path = path.Insert(path.IndexOf('.'), "icon");
-                    <img src=@(path) alt="Logo" class="profilitem" />
+                    <img src=@(path) alt="Logo" id=@("item" + item.Item.Id) class="profilitem" />
+                    <script>
+                        tempItem = { Id:@item.Item.Id, Type:"@(item.Item.Type)", Selected:false };
+                    </script>
                 }
+                <script>
+                        listOfItems[@item.Item.Id] = tempItem;
+
+                        $('@("#item"+item.Item.Id)').click(function () {
+                            listOfItems[@item.Item.Id].Selected = true;
+                                document.getElementById('@("item"+item.Item.Id)').classList.add('selecteditem');
+                                listOfItems.forEach(function (element) {
+                                    if (element.Id != @item.Item.Id && element.Type == listOfItems[@item.Item.Id].Type) {
+
+                                        element.Selected = false;
+                                        document.getElementById('item'+element.Id).classList.remove('selecteditem');
+                                    }
+                                });
+                            console.log(listOfItems);
+                        })
+                </script>
             }
+
+            <script>
+                console.log(listOfItems);
+            </script>
 
         }
     </div>
@@ -83,6 +123,10 @@
             </thead>
             <tbody>
                 <tr>
+                    <td>Title</td>
+                    <td>@Html.DropDownList("Titles", new SelectList(new SelectListItem[] { new SelectListItem() { Text="" } }), "Select Title", new { @id = "ddTilte" })</td>
+                </tr>
+                <tr>
                     <td>Pseudo</td>
                     <td>@Model.Pseudo</td>
                 </tr>
@@ -96,5 +140,27 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-11">
+        <button id="savechangebutton" class="btn btn-primary puttoright">Save Changes</button>
+        <script>
+            $('#savechangebutton').click(function () { 
+                var items = "";
+                document.getElementById('ddTilte');
+                var datavalue = JSON.stringify(listOfItems);
+                $.ajax({
+                    type: "POST",
+                    url: "Profile/ChangeSelectedItem?param=" + datavalue,
+                    contentType: "text/plain",
+                }).done(function (resp) {
+                    window.location.replace("Profile");
+                }).error(function (err) {
+                    window.location.replace("Profile");
+                });
+            });
+        </script>
     </div>
 </div>

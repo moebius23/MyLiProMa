@@ -6,6 +6,7 @@ using MyLittleProjectManager.Data;
 using MyLittleProjectManager.Models;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace MyLittleProjectManager.Controllers
 {
@@ -36,7 +37,25 @@ namespace MyLittleProjectManager.Controllers
 
             if (pp.Pseudo != null) { HttpContext.Session.SetString("Pseudo", pp.Pseudo); }
 
+            pp.AvailableItems = new List<PlayerItem>();
+            pp.AvailableItems.Add(new PlayerItem() { Item = new Item() { Id=0, Type = EItemType.Avatar, ImageLink = "/images/assets/animals/characterautruche.png" } });
+            pp.AvailableItems.Add(new PlayerItem() { Item = new Item() { Id = 1, Type = EItemType.Hat, ImageLink = "/images/assets/animals/characterautruchehat.png" } });
+            pp.AvailableItems.Add(new PlayerItem() { Item = new Item() { Id = 2, Type = EItemType.Hat, ImageLink = "/images/assets/animals/characterautruchehatfete.png" } });
+
+            pp.SelectedItems = new Dictionary<EItemType, PlayerItem>();
+            pp.SelectedItems.Add(EItemType.Avatar, pp.AvailableItems[0]);
+            pp.SelectedItems.Add(EItemType.Hat, pp.AvailableItems[1]);
+
             return View(pp);
         }
+
+        [HttpPost]
+        [Authorize]
+        public bool ChangeSelectedItem(string data)
+        {
+            string value = HttpContext.Request.Query["param"].ToString();
+            return true;
+        }
+
     }
 }
