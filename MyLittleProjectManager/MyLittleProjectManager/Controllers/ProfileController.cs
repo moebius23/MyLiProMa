@@ -39,7 +39,7 @@ namespace MyLittleProjectManager.Controllers
 			else pp = (new PlayerProfileManagement(_context)).CreatePlayerProfile(user.UserName);
 
             if (pp.Pseudo != null) { HttpContext.Session.SetString("Pseudo", pp.Pseudo); }
-
+            
             pp.AvailableItems = new List<PlayerItem>();
             pp.AvailableItems.Add(new PlayerItem() { Item = new Item() { Id=0, Type = EItemType.Avatar, ImageLink = "/images/assets/animals/characterautruche.png" } });
             pp.AvailableItems.Add(new PlayerItem() { Item = new Item() { Id = 1, Type = EItemType.Hat, ImageLink = "/images/assets/animals/characterautruchehat.png" } });
