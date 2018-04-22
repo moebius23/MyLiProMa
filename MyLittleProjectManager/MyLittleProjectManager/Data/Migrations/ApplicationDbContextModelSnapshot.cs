@@ -184,6 +184,44 @@ namespace MyLittleProjectManager.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("MyLittleProjectManager.Models.Card", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ColumnId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Order");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColumnId");
+
+                    b.ToTable("Cards");
+                });
+
+            modelBuilder.Entity("MyLittleProjectManager.Models.Column", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Order");
+
+                    b.Property<int?>("ProjectId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Columns");
+                });
+
             modelBuilder.Entity("MyLittleProjectManager.Models.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -193,17 +231,26 @@ namespace MyLittleProjectManager.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("PlayerProfileId");
-
                     b.Property<int>("Price");
 
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerProfileId");
+                    b.ToTable("Items");
+                });
 
-                    b.ToTable("Item");
+            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerItem", b =>
+                {
+                    b.Property<int>("ItemId");
+
+                    b.Property<int>("PlayerId");
+
+                    b.HasKey("ItemId", "PlayerId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayerItems");
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProfile", b =>
@@ -217,13 +264,51 @@ namespace MyLittleProjectManager.Data.Migrations
 
                     b.Property<string>("SelectedItemsJson");
 
-                    b.Property<int?>("SelectedTitleId");
+                    b.HasKey("Id");
+
+                    b.ToTable("PlayerProfiles");
+                });
+
+            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProject", b =>
+                {
+                    b.Property<int>("ProjectId");
+
+                    b.Property<int>("PlayerId");
+
+                    b.HasKey("ProjectId", "PlayerId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayerProjects");
+                });
+
+            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerTitle", b =>
+                {
+                    b.Property<int>("TitleId");
+
+                    b.Property<int>("PlayerId");
+
+                    b.Property<bool>("IsSelected");
+
+                    b.HasKey("TitleId", "PlayerId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayerTitles");
+                });
+
+            modelBuilder.Entity("MyLittleProjectManager.Models.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SelectedTitleId");
-
-                    b.ToTable("PlayerProfile");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("MyLittleProjectManager.Models.Title", b =>
@@ -231,17 +316,13 @@ namespace MyLittleProjectManager.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("PlayerProfileId");
-
                     b.Property<int>("Price");
 
                     b.Property<string>("Text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerProfileId");
-
-                    b.ToTable("Title");
+                    b.ToTable("Titles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -296,25 +377,57 @@ namespace MyLittleProjectManager.Data.Migrations
                         .HasForeignKey("PlayerProfileId");
                 });
 
-            modelBuilder.Entity("MyLittleProjectManager.Models.Item", b =>
+            modelBuilder.Entity("MyLittleProjectManager.Models.Card", b =>
                 {
-                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile")
+                    b.HasOne("MyLittleProjectManager.Models.Column")
+                        .WithMany("Cards")
+                        .HasForeignKey("ColumnId");
+                });
+
+            modelBuilder.Entity("MyLittleProjectManager.Models.Column", b =>
+                {
+                    b.HasOne("MyLittleProjectManager.Models.Project")
+                        .WithMany("Columns")
+                        .HasForeignKey("ProjectId");
+                });
+
+            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerItem", b =>
+                {
+                    b.HasOne("MyLittleProjectManager.Models.Item", "Item")
+                        .WithMany("PlayerItems")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile", "Player")
                         .WithMany("AvailableItems")
-                        .HasForeignKey("PlayerProfileId");
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProfile", b =>
+            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerProject", b =>
                 {
-                    b.HasOne("MyLittleProjectManager.Models.Title", "SelectedTitle")
-                        .WithMany()
-                        .HasForeignKey("SelectedTitleId");
+                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile", "Player")
+                        .WithMany("PlayerProjects")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MyLittleProjectManager.Models.Project", "Project")
+                        .WithMany("PlayerProjects")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("MyLittleProjectManager.Models.Title", b =>
+            modelBuilder.Entity("MyLittleProjectManager.Models.PlayerTitle", b =>
                 {
-                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile")
+                    b.HasOne("MyLittleProjectManager.Models.PlayerProfile", "Player")
                         .WithMany("AvailableTitles")
-                        .HasForeignKey("PlayerProfileId");
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MyLittleProjectManager.Models.Title", "Title")
+                        .WithMany("PlayerTitles")
+                        .HasForeignKey("TitleId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

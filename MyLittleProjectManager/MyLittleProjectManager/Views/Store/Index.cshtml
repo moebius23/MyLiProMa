@@ -1,0 +1,167 @@
+﻿@model StoreViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .theClass{}
+</style>
+<h2>Store</h2>
+
+<script>
+    $(document).ready(function () {
+        $('#buyButton').on('click', function (evt) {
+
+            var webMethod = "/Store/Index";
+
+            var parameters = "{\"ItemsId\":[";
+            
+            $.each($('.theClass:checkbox:checked'), function (idx, val) {
+                //var input = $(this);
+                if (val.title != null && val.title != "null") {
+                    var id = val.id;
+                    if (id.startsWith("item")) {
+                        parameters = parameters.concat(id.replace("item", "") + ",");
+                    }
+                }
+            });
+            if (parameters.endsWith(",")) {
+
+                parameters = parameters.substr(0, parameters.length - 1);
+            }
+            
+            parameters = parameters.concat("],\"TitlesId\":[");
+            $.each($('.theClass:checkbox:checked'), function (idx, val) {
+                //var input = $(this);
+                if (val.title != null && val.title != "null") {
+                    var id = val.id;
+                    if (id.startsWith("title")) {
+                        parameters = parameters.concat(id.replace("title", "") + ",");
+                    }
+                }
+            });
+            if (parameters.endsWith(",")) {
+
+                parameters = parameters.substr(0, parameters.length - 1);
+            }
+            parameters = parameters.concat("]}");
+            webMethod = webMethod + "?itemsBoughtViewModel=\"" + parameters+"\"";
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    //alert("success");
+                    window.location.href = "/Store";
+                },
+                error: function (e) {
+                    window.location.href = "/Store";
+                }
+            });
+
+        });
+    });
+
+    function CalculatePrice() {
+        var price = 0.0;
+        var nbr = 0;
+        $.each($('.theClass:checkbox:checked'), function (idx, val) {
+            //var input = $(this);
+            if (val.title != null && val.title != "null") {
+
+                    price += Number(val.title);
+                    nbr++;
+                    
+            }
+        });
+        $('#price').html(nbr + " items for " + price + " MICoins");
+        var remaining = (@Model.Profile.MICoins - price);
+        $('#remaining').html(remaining + " MICoins");
+        if (remaining < 0) {
+            $('#buyButton').prop('disabled', true);
+        }
+        else {
+            $('#buyButton').prop('disabled', false);
+
+        }
+    }
+</script>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Titles</h3>
+            
+                @foreach (var title in Model.StoreTitle.OrderBy(t => t.Price))
+    {
+                
+                    @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", title.Text, title.Price), isChecked: false, htmlAttributes: new { id = "title" + title.Id, style = "margin-right:5px",price=title.Price,title= title.Price,Class= "theClass" })
+                    @Html.Label(string.Format("{0} : {1} MICoins", title.Text, title.Price))
+                    <script>
+                        $('#title' +@title.Id).change(function () {
+                            CalculatePrice();
+                            if (this.checked) {
+                                
+                            }
+                            else {
+                                
+                            }
+
+                        })
+                    </script>
+                <br/>
+}
+            
+        </div>
+        <div class="col-md-6">
+            <h3>Avatar</h3>
+            @foreach (var item in Model.StoreItems)
+    {
+
+        @Html.CheckBox(expression: string.Format("{0} : {1} MICoins", item.Name, item.Price), isChecked: false, htmlAttributes: new { id = "item" + item.Id, style = "margin-right:5px",price=item.Price, title = item.Price, Class = "theClass" })
+        @Html.Label(string.Format("{0} : {1} MICoins", item.Name, item.Price))
+        <script>
+                        $('#item' +@item.Id).change(function () {
+                            CalculatePrice();
+                            if (this.checked) {
+
+                            }
+                            else {
+
+                            }
+
+                        })
+        </script>
+        <br />
+}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Inventory</h3>
+            <ul>
+                @foreach (var item in Model.Profile.AvailableItems.OrderBy(i => i.Item.Type))
+                {
+                    <li>
+                        @item.Item.Name
+                    </li>
+                }
+                @foreach (var title in Model.Profile.AvailableTitles)
+                {
+                    <li>
+                        @title.Title.Text
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Shopkeeper</h3>
+            <h4>Balance :</h4>
+            <p>@Model.Profile.MICoins</p>
+            <h4>Price :</h4>
+            <p class="text-warning" id="price"></p>
+            <h4>Balance remaining after buy : </h4>
+            <p id="remaining"></p>
+            <input type="button" value="Buy"  id="buyButton" >
+        </div>
+    </div>

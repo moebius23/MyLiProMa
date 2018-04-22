@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model PlayerProfile
+
+<style>
+    .profilavatarcanva {
+        background-color: #f9f9f9;
+        position: relative;
+        height:50vmin;
+        text-align: center;
+        margin: auto;
+    }
+
+    .profilavatar {
+        position: absolute;
+        top: 0px;
+        left: 2vmin;
+        height : 50vmin;
+    }
+</style>
+
+<div id="canva" class="profilavatarcanva">
+    @if (Model.SelectedItems != null && Model.SelectedItems.ContainsKey(EItemType.Avatar))
+    {
+        var path = Model.SelectedItems[EItemType.Avatar].Item.ImageLink.ToString();
+        <img src=@(path) alt="Logo" class="profilavatar" />
+        foreach (EItemType it in Enum.GetValues(typeof(EItemType)))
+        {
+            if (it != EItemType.Avatar && Model.SelectedItems.ContainsKey(it))
+            {
+                <img src=@Model.SelectedItems[it].Item.ImageLink alt="Logo" class="profilavatar" />
+            }
+
+        }
+    }
+    else
+    {
+        <img src="~/images/assets/emptyavatar.png" alt="Logo" class="profilavatar" />
+    }
+</div>
+

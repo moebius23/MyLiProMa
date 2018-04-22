@@ -1,0 +1,36 @@
+﻿
+@model List<LeaderboardViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Leaderboard</h2>
+
+<table width="100%">
+    
+    <tr style="background-color:lightgray;font-weight:bold">
+
+        <td>
+            Rank
+        </td>
+        <td>
+            Pseudo
+        </td>
+        <td>Title</td>
+        <td>Points</td>
+    </tr>
+    @{ 
+        int rank = 0;
+    }
+    @foreach (var line in Model.OrderByDescending(l => l.TotalMICoins))
+    {
+         rank++;
+        <tr>
+            <td>@rank</td>
+            <td>@line.Pseudo</td>
+            <td>@line.Title</td>
+            <td>@line.TotalMICoins</td>
+        </tr>
+        
+    }
+</table>
