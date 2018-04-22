@@ -24,6 +24,8 @@ namespace MyLittleProjectManager.Controllers
 		public IActionResult Index()
 		{
             var profiles = _context.PlayerProfiles.ToList();
+			var items = _context.Items.ToList();
+			var titles = _context.Titles.ToList();
 			var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 
 			PlayerProfile pp;

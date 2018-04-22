@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyLittleProjectManager.Data;
 using MyLittleProjectManager.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -59,13 +60,16 @@ namespace MyLittleProjectManager.Controllers
         [HttpPost]
         public JsonResult Index(string itemsBoughtViewModel)
         {
+			var profiles = _context.PlayerProfiles.ToList();
 			var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
 			PlayerProfile pp = _context.PlayerProfiles.Where(p => p == user.PlayerProfile)
 					.Include(p => p.AvailableItems)
 					.Include(p => p.AvailableTitles)
 					.SingleOrDefault();
-								  
-			foreach (var itemId in itemsBoughtViewModel.ItemsId)
+
+			ItemsBoughtViewModel itemsBought = JsonConvert.DeserializeObject<ItemsBoughtViewModel>(itemsBoughtViewModel.Trim('"'));
+
+			foreach (var itemId in itemsBought.ItemsId)
 			{
 				Item item = _context.Items.SingleOrDefault(i => i.Id == itemId);
 				if (item != null)
@@ -76,10 +80,10 @@ namespace MyLittleProjectManager.Controllers
 						PlayerItem playerItem = new PlayerItem() { Item = item, Player = pp };
 						pp.AvailableItems.Add(playerItem);
 					}
-					else return StatusCode(402);
+					else return Json(false);
 				}
 			}
-			foreach (var titleId in itemsBoughtViewModel.TitlesId)
+			foreach (var titleId in itemsBought.TitlesId)
 			{
 				Title title = _context.Titles.SingleOrDefault(i => i.Id == titleId);
 				if (title != null)
@@ -90,7 +94,7 @@ namespace MyLittleProjectManager.Controllers
 						PlayerTitle playerTitle = new PlayerTitle() { Title = title, Player = pp };
 						pp.AvailableTitles.Add(playerTitle);
 					}
-					else return StatusCode(402);
+					else return Json(false);
 				}
 			}
 			_context.SaveChanges();
