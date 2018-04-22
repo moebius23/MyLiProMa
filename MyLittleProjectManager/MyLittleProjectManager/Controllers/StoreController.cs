@@ -56,10 +56,10 @@ namespace MyLittleProjectManager.Controllers
             return View(storeViewModel);
         }
         [HttpPost]
-        public IActionResult Index(ItemsBoughtViewModel itemsBoughtViewModel)
+        public JsonResult Index(string itemsBoughtViewModel)
         {
 
-            return RedirectToAction("Index");
+            return Json(true);
         }
 
     }

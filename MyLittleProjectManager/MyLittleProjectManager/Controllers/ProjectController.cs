@@ -29,7 +29,7 @@ namespace MyLittleProjectManager.Controllers
 		public JsonResult MoveCard(int CardId, int NewColumnId, string name = "", string description = "")
 		{
 			Console.WriteLine(String.Format("Moving card {0} to column {1}", CardId, NewColumnId));
-						  
+            var profiles = _context.PlayerProfiles.ToList();
 			var player = (_context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault()).PlayerProfile;
 
 			Card movingCard;
