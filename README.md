@@ -24,6 +24,7 @@ http://myliproma.azurewebsites.net/
 - Leaderboard
 
 ## What needs to be done
+- Debugging and code cleaning
 - Visual improvements
 - Profile management + responsiveness
 - Manage severel project with invitation to other members
@@ -33,4 +34,6 @@ http://myliproma.azurewebsites.net/
 
 ## Where does the project come from ?
 
+This project was made in less than 48hours for the Tech'Office Hackaton organized by the Microsoft Innovation Center Belgique.
+If the code is ugly, it's because of the lack of sleep, don't blame us too hard :D
 Look over here ! http://www.mic-belgique.be/
