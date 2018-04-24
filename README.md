@@ -9,7 +9,7 @@ With it you can manage a project with three columns : **To Do**, **Doing** and *
 **You can find the project in alpha version here**
 http://myliproma.azurewebsites.net/
 
-**The Discord server is here :** https://discord.gg/gUx7E
+**The Discord server is here :** https://discord.gg/KRnTs
 
 **And Twitter is here :** https://twitter.com/MyLittleProMa
 
