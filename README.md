@@ -11,6 +11,8 @@ http://myliproma.azurewebsites.net/
 
 **The Discord server is here :** https://discord.gg/gUx7E
 
+**And Twitter is here :** https://twitter.com/MyLittleProMa
+
 ## What is done
 - Acccount creation
 - Profile view
